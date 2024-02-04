@@ -46,6 +46,7 @@ public class playerMovement : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Z))
             {
+                AudioManager.Instance.PlayMusic("BGM");
                 playerAnimator.SetBool("isRun", true);
                 playerAnimator.SetBool("isStand", false);
                 GameManager.Instance.isGameActive = true;
@@ -76,6 +77,7 @@ public class playerMovement : MonoBehaviour
             jumpTimeCounter = jumpTime;
             playerAnimator.SetBool("isRun", false);
             playerAnimator.SetBool("isStand", true);
+            AudioManager.Instance.PlaySFX("Jump");
             rb.velocity = Vector2.up * jumpForce;
         }
         if (Input.GetButton("Jump") && isJumping == true && isShifting == false)
@@ -152,7 +154,7 @@ public class playerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Trap"))
         {
-            GameManager.Instance.isDie = true;
+            UIManager.Instance.EndGame();
         }
     }
 }

@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
     public bool isGameActive;
-    public bool isDie;
+    public float musicVolume;
+    public float sfxVolume;
 
     private void Awake()
     {
@@ -30,6 +32,5 @@ public class GameManager : MonoBehaviour
     private void Init()
     {
         isGameActive = false;
-        isDie = false;
     }
 }

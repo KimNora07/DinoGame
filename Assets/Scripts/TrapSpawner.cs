@@ -36,6 +36,10 @@ public class TrapSpawner : MonoBehaviour
 
                 yield return new WaitForSeconds(Random.Range(minSpawnTime, maxSpawnTime + 1));
             }
+            else
+            {
+                yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Z));
+            }
         }
     }
 
