@@ -155,6 +155,9 @@ public class playerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Trap"))
         {
             UIManager.Instance.EndGame();
+            playerAnimator.SetBool("isShift", false);
+            playerAnimator.SetBool("isRun", false);
+            playerAnimator.SetBool("isStand", true);
         }
     }
 }

@@ -24,6 +24,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        Quit();
+    }
     private void Start()
     {
         Init();
@@ -32,5 +36,13 @@ public class GameManager : MonoBehaviour
     private void Init()
     {
         isGameActive = false;
+    }
+
+    private void Quit()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 }
