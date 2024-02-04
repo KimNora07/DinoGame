@@ -13,6 +13,7 @@ public class playerMovement : MonoBehaviour
     private BoxCollider2D bc;
 
     public bool isJumping;
+    public bool isShifting;
 
     [SerializeField]
     private float jumpForce = 8.0f;
@@ -34,7 +35,9 @@ public class playerMovement : MonoBehaviour
 
     private void Start()
     {
+        playerAnimator.SetBool("isStand", true);
         playerAnimator.SetBool("isRun", false);
+        playerAnimator.SetBool("isShift", false);
     }
 
     private void Update()
@@ -44,31 +47,43 @@ public class playerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 playerAnimator.SetBool("isRun", true);
+                playerAnimator.SetBool("isStand", false);
                 GameManager.Instance.isGameActive = true;
             }
         }
         if(GameManager.Instance.isGameActive == true)
         {
-            isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
+            if(isGrounded == true)
+            {
+                playerAnimator.SetBool("isRun", true);
+                playerAnimator.SetBool("isStand", false);
+            }
             Jump();
             Shift();
         }
     }
 
+    private void FixedUpdate()
+    {
+        isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
+    }
+
     private void Jump()
     {
-        if (Input.GetButtonDown("Jump") && isGrounded == true)
+        if (Input.GetButtonDown("Jump") && isGrounded == true && isShifting == false)
         {
             isJumping = true;
             jumpTimeCounter = jumpTime;
             playerAnimator.SetBool("isRun", false);
+            playerAnimator.SetBool("isStand", true);
             rb.velocity = Vector2.up * jumpForce;
         }
-        if (Input.GetButton("Jump") && isJumping == true)
+        if (Input.GetButton("Jump") && isJumping == true && isShifting == false)
         {
             if (jumpTimeCounter > 0)
             {
                 playerAnimator.SetBool("isRun", false);
+                playerAnimator.SetBool("isStand", true);
                 rb.velocity = Vector2.up * jumpForce;
                 jumpTimeCounter -= Time.deltaTime;
             }
@@ -87,33 +102,49 @@ public class playerMovement : MonoBehaviour
 
     private void Shift()
     {
-        if (Input.GetButtonDown("Shift"))
+        if (Input.GetButtonDown("Shift") && isGrounded == true && isJumping == false)
         {
             playerAnimator.SetBool("isShift", true);
             playerAnimator.SetBool("isRun", false);
+            playerAnimator.SetBool("isStand", false);
             bc.size = new Vector2(0.875f, 0.46875f);
+            isShifting = true;
         }
 
         if (Input.GetButton("Shift"))
         {
-            playerAnimator.SetBool("isShift", true);
-            playerAnimator.SetBool("isRun", false);
+            if (isGrounded == true)
+            {
+                playerAnimator.SetBool("isShift", true);
+                playerAnimator.SetBool("isRun", false);
+                playerAnimator.SetBool("isStand", false);
+                rb.gravityScale = 7f;
+            }
+            else
+            {
+                rb.gravityScale = 15f;
+            }
             bc.size = new Vector2(0.875f, 0.46875f);
+            isShifting = true;
         }
 
         if (Input.GetButtonUp("Shift"))
         {
-            playerAnimator.SetBool("isShift", false);
-            playerAnimator.SetBool("isRun", true);
+            if(isGrounded == true)
+            {
+                playerAnimator.SetBool("isShift", false);
+                playerAnimator.SetBool("isRun", true);
+                playerAnimator.SetBool("isStand", false);
+            }
+            else
+            {
+                playerAnimator.SetBool("isShift", false);
+                playerAnimator.SetBool("isRun", false);
+                playerAnimator.SetBool("isStand", true);
+            }
             bc.size = new Vector2(0.63f, 0.7f);
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(GameManager.Instance.isGameActive == true && isGrounded == true)
-        {
-            playerAnimator.SetBool("isRun", true);
+            rb.gravityScale = 7f;
+            isShifting = false;
         }
     }
 }

@@ -23,7 +23,10 @@ public class BackGroundScrolling : MonoBehaviour
 
     private void Update()
     {
-        Scrolling();
+        if (GameManager.Instance.isGameActive == true)
+        {
+            Scrolling();
+        }
     }
 
     /// <summary>
