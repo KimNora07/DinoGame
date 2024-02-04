@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public bool isGameActive;
+    public bool isDie;
 
     private void Awake()
     {
@@ -29,5 +30,6 @@ public class GameManager : MonoBehaviour
     private void Init()
     {
         isGameActive = false;
+        isDie = false;
     }
 }
