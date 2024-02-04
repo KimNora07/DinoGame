@@ -10,6 +10,7 @@ public class playerMovement : MonoBehaviour
 
     private Animator playerAnimator;
     private Rigidbody2D rb;
+    private BoxCollider2D bc;
 
     public bool isJumping;
 
@@ -28,6 +29,7 @@ public class playerMovement : MonoBehaviour
     {
         playerAnimator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        bc = GetComponent<BoxCollider2D>();
     }
 
     private void Start()
@@ -49,6 +51,7 @@ public class playerMovement : MonoBehaviour
         {
             isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
             Jump();
+            Shift();
         }
     }
 
@@ -80,6 +83,30 @@ public class playerMovement : MonoBehaviour
             isJumping = false;
         }
 
+    }
+
+    private void Shift()
+    {
+        if (Input.GetButtonDown("Shift"))
+        {
+            playerAnimator.SetBool("isShift", true);
+            playerAnimator.SetBool("isRun", false);
+            bc.size = new Vector2(0.875f, 0.46875f);
+        }
+
+        if (Input.GetButton("Shift"))
+        {
+            playerAnimator.SetBool("isShift", true);
+            playerAnimator.SetBool("isRun", false);
+            bc.size = new Vector2(0.875f, 0.46875f);
+        }
+
+        if (Input.GetButtonUp("Shift"))
+        {
+            playerAnimator.SetBool("isShift", false);
+            playerAnimator.SetBool("isRun", true);
+            bc.size = new Vector2(0.63f, 0.7f);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
