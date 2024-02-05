@@ -98,10 +98,10 @@ public class UIManager : MonoBehaviour
         AudioManager.Instance.musicSource.Stop();
         bestScore = PlayerPrefs.GetFloat("BestScore");
 
-        if (bestScore < currentScore)
+        if (bestScore <= currentScore)
         {
             bestScore = currentScore;
-            PlayerPrefs.GetFloat("BestScore", bestScore);
+            PlayerPrefs.SetFloat("BestScore", bestScore);
         }
 
         GameManager.Instance.isGameActive = false;
